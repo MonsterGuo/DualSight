@@ -2,11 +2,48 @@
   "name": "dualsight",
   "private": true,
   "version": "1.0.0",
+  "description": "DualSight - side-by-side image and video comparison tool",
+  "author": "DualSight",
   "type": "module",
+  "main": "dist-electron/electron/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build:web": "tsc --noEmit && vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "npm run build:web && npm run build:electron",
+    "dist": "npm run build && electron-builder --win --x64",
+    "dist:win": "npm run build && node scripts/dist-win.mjs",
     "preview": "vite preview"
+  },
+  "build": {
+    "appId": "com.dualsight.app",
+    "productName": "DualSight",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DualSight"
+    }
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -17,6 +54,8 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "electron": "^44.3.0",
+    "electron-builder": "^26.15.3",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",

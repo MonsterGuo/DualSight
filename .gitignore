@@ -3,6 +3,8 @@ node_modules/
 
 # Build output
 dist/
+dist-electron/
+release/
 
 # TypeScript incremental build cache
 *.tsbuildinfo
@@ -36,3 +38,4 @@ Thumbs.db
 
 # Vite / caches
 .vite/
+.cache/
