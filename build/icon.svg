@@ -1,5 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="108" fill="#4f8cff"/>
-  <path d="M170 150 96 256l74 106" stroke="#ffffff" stroke-width="38" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M342 150l74 106-74 106" stroke="#ffffff" stroke-width="38" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2d6aff"/>
+      <stop offset="100%" stop-color="#7b3fff"/>
+    </linearGradient>
+  </defs>
+  <rect width="26" height="26" rx="6" fill="url(#bg)"/>
+  <!-- Left lens -->
+  <circle cx="8.5" cy="13" r="5" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>
+  <!-- Right lens -->
+  <circle cx="17.5" cy="13" r="5" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>
+  <!-- Bridge -->
+  <line x1="11" y1="13" x2="15" y2="13" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Left glint -->
+  <circle cx="6.8" cy="11.2" r="1" fill="rgba(255,255,255,0.7)"/>
+  <!-- Right glint -->
+  <circle cx="15.8" cy="11.2" r="1" fill="rgba(255,255,255,0.7)"/>
 </svg>

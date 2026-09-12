@@ -69,10 +69,16 @@ export function Toolbar({
       </IconButton>
 
       <div className="flex items-center gap-2">
-        <div className="grid h-7 w-7 place-items-center rounded-md bg-brand text-white">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m9 7-4 5 4 5" />
-            <path d="m15 7 4 5-4 5" />
+        <div
+          className="grid h-7 w-7 place-items-center rounded-md"
+          style={{ background: 'linear-gradient(135deg, #2d6aff, #7b3fff)' }}
+        >
+          <svg width="17" height="17" viewBox="0 0 26 26" fill="none">
+            <circle cx="8.5" cy="13" r="5" stroke="white" strokeOpacity="0.9" strokeWidth="1.6" />
+            <circle cx="17.5" cy="13" r="5" stroke="white" strokeOpacity="0.9" strokeWidth="1.6" />
+            <line x1="11" y1="13" x2="15" y2="13" stroke="white" strokeOpacity="0.9" strokeWidth="1.6" strokeLinecap="round" />
+            <circle cx="6.8" cy="11.2" r="1" fill="white" fillOpacity="0.7" />
+            <circle cx="15.8" cy="11.2" r="1" fill="white" fillOpacity="0.7" />
           </svg>
         </div>
         <span className="text-[15px] font-semibold tracking-tight text-ink">DualSight 度视</span>
