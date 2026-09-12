@@ -57,7 +57,7 @@ export function StatusBar({
         <span className="font-mono">Cursor 0, 0 px</span>
       )}
 
-      <span className="ml-auto">{bothLoaded ? `Zoom ${Math.round(zoomPct)}%` : 'DualSight v1.0.0'}</span>
+      <span className="ml-auto">{bothLoaded ? `Zoom ${Math.round(zoomPct)}%` : 'DualSight v1.0.2'}</span>
     </footer>
   )
 }
