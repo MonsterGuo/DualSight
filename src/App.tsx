@@ -340,8 +340,19 @@ export default function App() {
   const videoA = bothVideos ? (elements[SlotId.A] as HTMLVideoElement | null) : null
   const videoB = bothVideos ? (elements[SlotId.B] as HTMLVideoElement | null) : null
 
+  // True while the progress bar is being dragged; suppresses corrective
+  // re-seeks in the sync loop (they would fight the user's seeks).
+  const scrubbingRef = useRef(false)
+  // Timestamp of the last programmatic seek issued to B, used to throttle
+  // B seeks during scrubbing so its decoder is not flooded.
+  const lastBSeekRef = useRef(0)
+  // When > 0, B has been stuck "seeking" since this timestamp; a single
+  // corrective seek is allowed as a watchdog recovery.
+  const bSeekStallSinceRef = useRef(0)
+
   useEffect(() => {
     if (!bothVideos || !videoA || !videoB) return
+    let cancelled = false
     const apply = async () => {
       // B stays silent; A is the audible master
       videoB.muted = true
@@ -349,10 +360,11 @@ export default function App() {
       videoA.volume = clamp(volume, 0, 1)
       if (videoPlaying) {
         try {
-          await videoA.play()
-          await videoB.play()
+          // Start both together; Promise.all avoids delaying B until A
+          // finishes its play() promise.
+          await Promise.all([videoA.play(), videoB.play()])
         } catch {
-          setVideoPlaying(false)
+          if (!cancelled) setVideoPlaying(false)
         }
       } else {
         videoA.pause()
@@ -360,6 +372,9 @@ export default function App() {
       }
     }
     void apply()
+    return () => {
+      cancelled = true
+    }
   }, [bothVideos, videoA, videoB, videoPlaying, muted, volume, mediaA, mediaB])
 
   useEffect(() => {
@@ -383,9 +398,28 @@ export default function App() {
     let raf = 0
     let lastUi = 0
     const loop = (ts: number) => {
-      if (Math.abs(videoA.currentTime - videoB.currentTime) > 0.2) {
-        videoB.currentTime = videoA.currentTime
+      const aSeeking = videoA.seeking
+      const bSeeking = videoB.seeking
+      const drift = Math.abs(videoA.currentTime - videoB.currentTime)
+
+      if (bSeeking) {
+        // Watchdog: if B stays in "seeking" for too long (its seek queue
+        // was starved), allow one corrective seek to snap it back.
+        if (bSeekStallSinceRef.current === 0) bSeekStallSinceRef.current = ts
+        if (ts - bSeekStallSinceRef.current > 1500) {
+          videoB.currentTime = videoA.currentTime
+          bSeekStallSinceRef.current = ts + 100000
+        }
+      } else {
+        bSeekStallSinceRef.current = 0
+        // Never issue corrective seeks while either video is already
+        // seeking: doing so cancels the in-flight seek, and doing it every
+        // frame starves B's decoder (frozen picture after rapid scrubbing).
+        if (!scrubbingRef.current && !aSeeking && drift > 0.25) {
+          videoB.currentTime = videoA.currentTime
+        }
       }
+
       if (ts - lastUi > 120) {
         setVideoTime(videoA.currentTime)
         lastUi = ts
@@ -400,12 +434,36 @@ export default function App() {
     return () => cancelAnimationFrame(raf)
   }, [bothVideos, videoPlaying, videoA, videoB])
 
+  /** Continuous progress-bar drag: seek A immediately, throttle B. */
+  const scrubVideo = useCallback(
+    (t: number) => {
+      if (!videoA) return
+      scrubbingRef.current = true
+      const target = clamp(t, 0, videoA.duration || 0)
+      videoA.currentTime = target
+      setVideoTime(target)
+      if (videoB) {
+        const now = performance.now()
+        if (now - lastBSeekRef.current > 200) {
+          videoB.currentTime = target
+          lastBSeekRef.current = now
+        }
+      }
+    },
+    [videoA, videoB],
+  )
+
+  /** Committed seek (scrub release, skip buttons): exact seek on both. */
   const seekBoth = useCallback(
     (t: number) => {
       if (!videoA) return
+      scrubbingRef.current = false
       const target = clamp(t, 0, videoA.duration || 0)
       videoA.currentTime = target
-      if (videoB) videoB.currentTime = target
+      if (videoB) {
+        videoB.currentTime = target
+        lastBSeekRef.current = performance.now()
+      }
       setVideoTime(target)
     },
     [videoA, videoB],
@@ -699,6 +757,7 @@ export default function App() {
               onTogglePlay={() => setVideoPlaying((v) => !v)}
               onSkip={(d) => seekBoth(videoTime + d)}
               onSeek={seekBoth}
+              onScrub={scrubVideo}
               onToggleMute={() => setMuted((v) => !v)}
               onVolume={(v) => {
                 setVolume(v)

@@ -1,7 +1,7 @@
 {
   "name": "dualsight",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "DualSight - side-by-side image and video comparison tool",
   "author": "DualSight",
   "type": "module",

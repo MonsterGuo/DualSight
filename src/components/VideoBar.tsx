@@ -8,6 +8,9 @@ interface VideoBarProps {
   volume: number
   onTogglePlay: () => void
   onSkip: (delta: number) => void
+  /** Fired continuously while the progress bar is being dragged. */
+  onScrub: (t: number) => void
+  /** Fired once when a drag/keyboard seek is committed. */
   onSeek: (t: number) => void
   onToggleMute: () => void
   onVolume: (v: number) => void
@@ -29,6 +32,7 @@ export function VideoBar({
   volume,
   onTogglePlay,
   onSkip,
+  onScrub,
   onSeek,
   onToggleMute,
   onVolume,
@@ -74,12 +78,18 @@ export function VideoBar({
 
       <input
         type="range"
-        className="df-range flex-1"
+        className="df-range flex-1 cursor-pointer"
         min={0}
         max={max}
         step={0.01}
         value={Math.min(currentTime, max)}
-        onChange={(e) => onSeek(parseFloat(e.target.value))}
+        aria-label="Seek"
+        onChange={(e) => onScrub(parseFloat(e.target.value))}
+        onPointerUp={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
+        onPointerCancel={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
+        onTouchEnd={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
+        onKeyUp={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
+        onBlur={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
       />
 
       <span className="flex items-center gap-1.5 text-[11px] font-semibold text-green">
