@@ -8,6 +8,7 @@ import {
 } from '../types'
 import { MediaSlot } from './MediaSlot'
 import { Toggle } from './Toggle'
+import { LOUPE_MIN_SIZE, LOUPE_MAX_SIZE } from './Loupe'
 
 interface SidebarProps {
   tab: MediaTab
@@ -22,6 +23,8 @@ interface SidebarProps {
   onSyncCursorChange: (v: boolean) => void
   background: BackgroundKind
   onBackgroundChange: (b: BackgroundKind) => void
+  loupeSize: number
+  onLoupeSizeChange: (v: number) => void
   stats: SimilarityStats | null
 }
 
@@ -79,6 +82,8 @@ export function Sidebar({
   onSyncCursorChange,
   background,
   onBackgroundChange,
+  loupeSize,
+  onLoupeSizeChange,
   stats,
 }: SidebarProps) {
   const bothImages =
@@ -136,6 +141,23 @@ export function Sidebar({
           <div className="flex items-center justify-between py-1.5">
             <span className="text-[12.5px] text-ink/90">Sync with cursor</span>
             <Toggle checked={syncCursor} onChange={onSyncCursorChange} label="Sync with cursor" />
+          </div>
+
+          <div className={`py-1.5 ${bothLoaded && syncCursor ? '' : 'pointer-events-none opacity-40'}`}>
+            <div className="flex items-center justify-between">
+              <span className="text-[12.5px] text-ink/90">Loupe size</span>
+              <span className="font-mono text-[11px] text-muted">{Math.round(loupeSize)}px</span>
+            </div>
+            <input
+              type="range"
+              className="df-range mt-2 w-full"
+              min={LOUPE_MIN_SIZE}
+              max={LOUPE_MAX_SIZE}
+              step={2}
+              value={loupeSize}
+              aria-label="Loupe size"
+              onChange={(e) => onLoupeSizeChange(parseFloat(e.target.value))}
+            />
           </div>
 
           <div className="pt-1.5">

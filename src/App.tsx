@@ -37,6 +37,7 @@ import { exampleImagePair, exampleVideoPair } from './lib/examples'
 import { Toolbar } from './components/Toolbar'
 import { Sidebar } from './components/Sidebar'
 import { CanvasStage } from './components/CanvasStage'
+import { LOUPE_DEFAULT_SIZE } from './components/Loupe'
 import { FadeBar } from './components/FadeBar'
 import { FlickerBar } from './components/FlickerBar'
 import { VideoBar } from './components/VideoBar'
@@ -77,6 +78,7 @@ export default function App() {
   const [showA, setShowA] = useState(true)
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
   const [cursorInfo, setCursorInfo] = useState<CursorInfo | null>(null)
+  const [loupeSize, setLoupeSize] = useState(LOUPE_DEFAULT_SIZE)
   const [stats, setStats] = useState<ReturnType<typeof computeStats>>(null)
 
   /* ---------------- video state ---------------- */
@@ -689,6 +691,8 @@ export default function App() {
             onSyncCursorChange={setSyncCursor}
             background={background}
             onBackgroundChange={setBackground}
+            loupeSize={loupeSize}
+            onLoupeSizeChange={setLoupeSize}
             stats={stats}
           />
         )}
@@ -713,6 +717,7 @@ export default function App() {
                 divider={divider}
                 fade={fade}
                 flickerShowA={showA}
+                loupeSize={loupeSize}
                 cursor={cursor}
                 dragActive={dragActive}
                 onCursor={setCursor}

@@ -33,6 +33,7 @@ interface CanvasStageProps {
   divider: number
   fade: number
   flickerShowA: boolean
+  loupeSize: number
   cursor: { x: number; y: number } | null
   dragActive: boolean
   onCursor: (p: { x: number; y: number } | null) => void
@@ -80,6 +81,7 @@ export function CanvasStage(props: CanvasStageProps) {
     divider,
     fade,
     flickerShowA,
+    loupeSize,
     cursor,
     dragActive,
     onCursor,
@@ -238,10 +240,12 @@ export function CanvasStage(props: CanvasStageProps) {
         renderedW: fitLocal.w * t.scale,
         renderedH: fitLocal.h * t.scale,
       }
-      const lx = clamp(cursor.x + 18, 78, size.w - 78)
-      const ly = clamp(cursor.y + 18, 78, size.h - 78)
+      const half = loupeSize / 2
+      const lx = clamp(cursor.x + 18, half + 8, size.w - half - 8)
+      const ly = clamp(cursor.y + 18, half + 8, size.h - half - 8)
       loupe = (
         <Loupe
+          size={loupeSize}
           x={lx}
           y={ly}
           frameA={frame}
