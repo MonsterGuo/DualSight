@@ -43,6 +43,7 @@ import { FlickerBar } from './components/FlickerBar'
 import { VideoBar } from './components/VideoBar'
 import { StatusBar } from './components/StatusBar'
 import { mediaFilter } from './lib/media'
+import { Theme, useTheme } from './lib/theme'
 
 const MIN_SCALE = 0.1
 const MAX_SCALE = 8
@@ -54,10 +55,26 @@ interface CursorInfo {
 }
 
 export default function App() {
+  const { theme } = useTheme()
+
   /* ---------------- core UI state ---------------- */
   const [mode, setMode] = useState<CompareMode>(CompareMode.Slider)
   const [tab, setTab] = useState<MediaTab>(MediaTab.Image)
-  const [background, setBackground] = useState<BackgroundKind>(BackgroundKind.Dark)
+  // The media-canvas backdrop follows the app theme until the user picks one
+  // explicitly (Dark/Light/Checker), after which their choice is respected.
+  const bgOverrideRef = useRef(false)
+  const [background, setBackgroundState] = useState<BackgroundKind>(() =>
+    theme === Theme.Light ? BackgroundKind.Light : BackgroundKind.Dark,
+  )
+  const setBackground = useCallback((b: BackgroundKind) => {
+    bgOverrideRef.current = true
+    setBackgroundState(b)
+  }, [])
+  useEffect(() => {
+    if (!bgOverrideRef.current) {
+      setBackgroundState(theme === Theme.Light ? BackgroundKind.Light : BackgroundKind.Dark)
+    }
+  }, [theme])
   const [syncPan, setSyncPan] = useState(true)
   const [syncCursor, setSyncCursor] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(true)

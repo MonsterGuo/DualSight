@@ -265,9 +265,14 @@ export function CanvasStage(props: CanvasStageProps) {
     <div
       ref={containerRef}
       className={`absolute inset-0 overflow-hidden ${
-        background === BackgroundKind.Checker ? 'bg-checker' : ''
+        bothLoaded && background === BackgroundKind.Checker ? 'bg-checker' : ''
       } ${dragActive ? 'ring-2 ring-inset ring-brand/60' : ''}`}
-      style={{ ...BG_STYLE[background], cursor: bothLoaded ? cursorStyle : 'default' }}
+      style={{
+        // The Dark/Light/Checker backdrop only applies behind loaded media;
+        // before that the stage follows the application chrome (theme).
+        ...(bothLoaded ? BG_STYLE[background] : {}),
+        cursor: bothLoaded ? cursorStyle : 'default',
+      }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={endDrag}

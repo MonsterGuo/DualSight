@@ -2,8 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- theme tokens ----------
+   RGB channel triplets are consumed by tailwind (rgb(var(--c-x) / <alpha>)).
+   Scalar hex vars are used by plain CSS below. */
 :root {
   color-scheme: dark;
+
+  --c-app: 30 30 30;
+  --c-panel: 37 37 37;
+  --c-panel2: 42 42 42;
+  --c-line: 51 51 51;
+  --c-ink: 232 232 232;
+  --c-muted: 153 153 153;
+  /* overlay "wash" applied on hover: white on dark surfaces, black on light */
+  --c-wash: 255 255 255;
+  --c-strong: 74 74 74;
+  --c-chunk: 44 44 44;
+
+  --scroll-thumb: #3a3a3a;
+  --scroll-thumb-hover: #4a4a4a;
+  --range-track: #4a4a4a;
+  --spin-bg: #1e1e1e;
+  --spin-border: #333333;
+  --spin-ink: #e8e8e8;
+  --toggle-off: #4a4a4a;
+  --brand-soft: #1a2a40;
+}
+
+:root.light {
+  color-scheme: light;
+
+  --c-app: 245 245 245;
+  --c-panel: 255 255 255;
+  --c-panel2: 240 240 240;
+  --c-line: 224 224 224;
+  --c-ink: 28 28 28;
+  --c-muted: 110 110 110;
+  --c-wash: 0 0 0;
+  --c-strong: 196 196 196;
+  --c-chunk: 235 235 235;
+
+  --scroll-thumb: #c8c8c8;
+  --scroll-thumb-hover: #acacac;
+  --range-track: #d2d2d2;
+  --spin-bg: #ffffff;
+  --spin-border: #d5d5d5;
+  --spin-ink: #1c1c1c;
+  --toggle-off: #c9c9c9;
+  --brand-soft: #e6efff;
 }
 
 html,
@@ -14,8 +60,8 @@ body,
 }
 
 body {
-  background: #1e1e1e;
-  color: #e8e8e8;
+  background: rgb(var(--c-app));
+  color: rgb(var(--c-ink));
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 13px;
   overflow: hidden;
@@ -29,13 +75,13 @@ body {
   height: 10px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #3a3a3a;
+  background: var(--scroll-thumb);
   border: 3px solid transparent;
   border-radius: 8px;
   background-clip: content-box;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: #4a4a4a;
+  background: var(--scroll-thumb-hover);
   background-clip: content-box;
 }
 *::-webkit-scrollbar-track {
@@ -59,7 +105,7 @@ input[type='range'].df-range {
   appearance: none;
   height: 3px;
   border-radius: 2px;
-  background: #4a4a4a;
+  background: var(--range-track);
   outline: none;
   cursor: pointer;
 }
@@ -86,10 +132,10 @@ input[type='range'].df-range::-moz-range-thumb {
 
 /* ---------- numeric spin input ---------- */
 .df-spin {
-  background: #1e1e1e;
-  border: 1px solid #333;
+  background: var(--spin-bg);
+  border: 1px solid var(--spin-border);
   border-radius: 6px;
-  color: #e8e8e8;
+  color: var(--spin-ink);
   height: 26px;
   padding: 0 6px;
   width: 64px;

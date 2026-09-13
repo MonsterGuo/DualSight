@@ -160,7 +160,7 @@ export const CompareImageIcon = (p: SVGProps<SVGSVGElement> & { size?: number })
   <Icon {...p} strokeWidth={1.4}>
     <rect x="2.5" y="5" width="13" height="14" rx="2.5" />
     <path d="M8 10 6 12l2 2" />
-    <rect x="8.5" y="5" width="13" height="14" rx="2.5" fill="#1e1e1e" />
+    <rect x="8.5" y="5" width="13" height="14" rx="2.5" fill="rgb(var(--c-panel))" />
     <path d="m16 10 2 2-2 2" />
   </Icon>
 )
@@ -178,6 +178,29 @@ export const MiniChevronsIcon = (p: SVGProps<SVGSVGElement> & { size?: number })
   <Icon {...p} strokeWidth={2.4}>
     <path d="m10 8-3 4 3 4" />
     <path d="m14 8 3 4-3 4" />
+  </Icon>
+)
+
+/** Globe for the language switch control. */
+export const GlobeIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18" />
+    <path d="M12 3c2.6 2.5 2.6 15.5 0 18" />
+    <path d="M12 3c-2.6 2.5-2.6 15.5 0 18" />
+  </Icon>
+)
+
+export const SunIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+  </Icon>
+)
+
+export const MoonIcon = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z" />
   </Icon>
 )
 

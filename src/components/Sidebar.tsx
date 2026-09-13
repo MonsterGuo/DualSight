@@ -9,6 +9,7 @@ import {
 import { MediaSlot } from './MediaSlot'
 import { Toggle } from './Toggle'
 import { LOUPE_MIN_SIZE, LOUPE_MAX_SIZE } from './Loupe'
+import { useI18n, type TKey } from '../lib/i18n'
 
 interface SidebarProps {
   tab: MediaTab
@@ -53,8 +54,8 @@ function TabButton({
       onClick={onClick}
       className="h-[20px] w-[38px] rounded-[5px] border text-[10.5px] font-bold transition-colors"
       style={{
-        borderColor: active ? color : '#333333',
-        color: active ? color : '#999999',
+        borderColor: active ? color : 'rgb(var(--c-line))',
+        color: active ? color : 'rgb(var(--c-muted))',
         backgroundColor: active ? `${color}1f` : 'transparent',
       }}
     >
@@ -63,10 +64,10 @@ function TabButton({
   )
 }
 
-const BG_SWATCHES: { id: BackgroundKind; label: string; chipClass: string }[] = [
-  { id: BackgroundKind.Dark, label: 'Dark', chipClass: 'bg-[#111111]' },
-  { id: BackgroundKind.Light, label: 'Light', chipClass: 'bg-white' },
-  { id: BackgroundKind.Checker, label: 'Check', chipClass: 'bg-checker' },
+const BG_SWATCHES: { id: BackgroundKind; labelKey: TKey; chipClass: string }[] = [
+  { id: BackgroundKind.Dark, labelKey: 'bgDark', chipClass: 'bg-[#111111]' },
+  { id: BackgroundKind.Light, labelKey: 'bgLight', chipClass: 'bg-white' },
+  { id: BackgroundKind.Checker, labelKey: 'bgCheck', chipClass: 'bg-checker' },
 ]
 
 export function Sidebar({
@@ -86,6 +87,7 @@ export function Sidebar({
   onLoupeSizeChange,
   stats,
 }: SidebarProps) {
+  const { t } = useI18n()
   const bothImages =
     mediaA?.kind === MediaKind.Image && mediaB?.kind === MediaKind.Image
   const eitherVideo =
@@ -96,7 +98,7 @@ export function Sidebar({
     <aside className="flex w-60 shrink-0 flex-col border-r border-line bg-panel">
       <div className="flex-1 overflow-y-auto">
         <div className="flex items-center justify-between px-3 pt-3">
-          <SectionLabel>Media</SectionLabel>
+          <SectionLabel>{t('media')}</SectionLabel>
           <div className="flex gap-1">
             <TabButton
               active={tab === MediaTab.Image}
@@ -133,19 +135,19 @@ export function Sidebar({
         </div>
 
         <div className="border-t border-line px-3 py-3">
-          <SectionLabel>Options</SectionLabel>
+          <SectionLabel>{t('options')}</SectionLabel>
           <div className="flex items-center justify-between py-1.5">
-            <span className="text-[12.5px] text-ink/90">Sync pan &amp; zoom</span>
-            <Toggle checked={syncPan} onChange={onSyncPanChange} label="Sync pan and zoom" />
+            <span className="text-[12.5px] text-ink/90">{t('syncPanZoom')}</span>
+            <Toggle checked={syncPan} onChange={onSyncPanChange} label={t('syncPanZoom')} />
           </div>
           <div className="flex items-center justify-between py-1.5">
-            <span className="text-[12.5px] text-ink/90">Sync with cursor</span>
-            <Toggle checked={syncCursor} onChange={onSyncCursorChange} label="Sync with cursor" />
+            <span className="text-[12.5px] text-ink/90">{t('syncCursor')}</span>
+            <Toggle checked={syncCursor} onChange={onSyncCursorChange} label={t('syncCursor')} />
           </div>
 
           <div className={`py-1.5 ${bothLoaded && syncCursor ? '' : 'pointer-events-none opacity-40'}`}>
             <div className="flex items-center justify-between">
-              <span className="text-[12.5px] text-ink/90">Loupe size</span>
+              <span className="text-[12.5px] text-ink/90">{t('loupeSize')}</span>
               <span className="font-mono text-[11px] text-muted">{Math.round(loupeSize)}px</span>
             </div>
             <input
@@ -155,15 +157,15 @@ export function Sidebar({
               max={LOUPE_MAX_SIZE}
               step={2}
               value={loupeSize}
-              aria-label="Loupe size"
+              aria-label={t('loupeSize')}
               onChange={(e) => onLoupeSizeChange(parseFloat(e.target.value))}
             />
           </div>
 
           <div className="pt-1.5">
-            <span className="text-[12.5px] text-ink/90">Background</span>
+            <span className="text-[12.5px] text-ink/90">{t('background')}</span>
             <div className="mt-2 grid grid-cols-3 gap-2">
-              {BG_SWATCHES.map(({ id, label, chipClass }) => {
+              {BG_SWATCHES.map(({ id, labelKey, chipClass }) => {
                 const selected = background === id
                 return (
                   <button
@@ -172,18 +174,18 @@ export function Sidebar({
                     onClick={() => onBackgroundChange(id)}
                     className="flex h-[52px] flex-col items-center justify-center gap-1.5 rounded-md border transition-colors"
                     style={{
-                      borderColor: selected ? '#4f8cff' : '#333333',
-                      backgroundColor: selected ? '#1a2a40' : 'transparent',
+                      borderColor: selected ? '#4f8cff' : 'rgb(var(--c-line))',
+                      backgroundColor: selected ? 'var(--brand-soft)' : 'transparent',
                     }}
                   >
                     <span
-                      className={`h-5 w-8 rounded-[4px] border border-white/10 ${chipClass}`}
+                      className={`h-5 w-8 rounded-[4px] border border-wash/10 ${chipClass}`}
                     />
                     <span
                       className="text-[10.5px]"
-                      style={{ color: selected ? '#4f8cff' : '#999999' }}
+                      style={{ color: selected ? '#4f8cff' : 'rgb(var(--c-muted))' }}
                     >
-                      {label}
+                      {t(labelKey)}
                     </span>
                   </button>
                 )
@@ -195,7 +197,7 @@ export function Sidebar({
 
       <div className="border-t border-line px-3 py-3">
         <div className="flex items-center justify-between">
-          <SectionLabel>Similarity</SectionLabel>
+          <SectionLabel>{t('similarity')}</SectionLabel>
           {stats && (
             <span className="text-[14px] font-semibold text-green">
               {stats.similarity.toFixed(1)}%
@@ -205,15 +207,15 @@ export function Sidebar({
 
         {!bothLoaded ? (
           <p className="pt-1 text-[12px] leading-relaxed text-muted">
-            Load both files to see stats.
+            {t('statsHint')}
           </p>
         ) : eitherVideo && !bothImages ? (
           <p className="pt-1 text-[12px] leading-relaxed text-muted">
-            Similarity analysis is available for images only.
+            {t('statsImagesOnly')}
           </p>
         ) : stats ? (
           <div>
-            <div className="h-[5px] overflow-hidden rounded-full bg-white/10">
+            <div className="h-[5px] overflow-hidden rounded-full bg-wash/10">
               <div
                 className="h-full rounded-full bg-green transition-all"
                 style={{ width: `${stats.similarity}%` }}
@@ -221,7 +223,7 @@ export function Sidebar({
             </div>
             <div className="space-y-2 pt-3 text-[12px]">
               <div className="flex justify-between">
-                <span className="text-muted">Different pixels</span>
+                <span className="text-muted">{t('diffPixels')}</span>
                 <span className="text-accentB">{stats.diffPercent.toFixed(1)}%</span>
               </div>
               <div className="flex justify-between">
@@ -241,7 +243,7 @@ export function Sidebar({
             </div>
           </div>
         ) : (
-          <p className="pt-1 text-[12px] text-muted">Computing…</p>
+          <p className="pt-1 text-[12px] text-muted">{t('statsComputing')}</p>
         )}
       </div>
     </aside>

@@ -4,12 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        app: '#1e1e1e',
-        panel: '#252525',
-        panel2: '#2a2a2a',
-        line: '#333333',
-        ink: '#e8e8e8',
-        muted: '#999999',
+        app: 'rgb(var(--c-app) / <alpha-value>)',
+        panel: 'rgb(var(--c-panel) / <alpha-value>)',
+        panel2: 'rgb(var(--c-panel2) / <alpha-value>)',
+        line: 'rgb(var(--c-line) / <alpha-value>)',
+        ink: 'rgb(var(--c-ink) / <alpha-value>)',
+        muted: 'rgb(var(--c-muted) / <alpha-value>)',
+        /* hover overlay: white on dark, black on light */
+        wash: 'rgb(var(--c-wash) / <alpha-value>)',
+        /* stronger hairline used for hover borders */
+        strong: 'rgb(var(--c-strong) / <alpha-value>)',
+        /* neutral raised chunk (empty-state tile, badges) */
+        chunk: 'rgb(var(--c-chunk) / <alpha-value>)',
         brand: '#4f8cff',
         accentB: '#f0a050',
         green: '#34d399',

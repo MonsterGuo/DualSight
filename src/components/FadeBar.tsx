@@ -1,4 +1,5 @@
 import { PauseIcon, PlayIcon } from './icons'
+import { useI18n } from '../lib/i18n'
 
 interface FadeBarProps {
   /** 0 = fully A, 1 = fully B */
@@ -9,6 +10,7 @@ interface FadeBarProps {
 }
 
 export function FadeBar({ value, onChange, playing, onTogglePlay }: FadeBarProps) {
+  const { t } = useI18n()
   return (
     <div className="flex h-10 shrink-0 items-center border-t border-line bg-app px-4">
       <div className="flex flex-1 items-center justify-center gap-3">
@@ -20,7 +22,7 @@ export function FadeBar({ value, onChange, playing, onTogglePlay }: FadeBarProps
           max={1}
           step={0.001}
           value={value}
-          aria-label="Fade mix"
+          aria-label={t('fadeMix')}
           onChange={(e) => onChange(parseFloat(e.target.value))}
         />
         <span className="text-[12.5px] text-muted">
@@ -30,10 +32,10 @@ export function FadeBar({ value, onChange, playing, onTogglePlay }: FadeBarProps
       <button
         type="button"
         onClick={onTogglePlay}
-        className="flex h-8 w-[76px] shrink-0 items-center justify-center gap-1.5 rounded-btn border border-line bg-panel2 text-[12.5px] text-ink/90 transition-colors hover:border-[#4a4a4a]"
+        className="flex h-8 w-[76px] shrink-0 items-center justify-center gap-1.5 rounded-btn border border-line bg-panel2 text-[12.5px] text-ink/90 transition-colors hover:border-strong"
       >
         {playing ? <PauseIcon size={12} /> : <PlayIcon size={12} />}
-        {playing ? 'Pause' : 'Play'}
+        {playing ? t('pause') : t('play')}
       </button>
     </div>
   )

@@ -1,4 +1,5 @@
 import { FilmBadgeIcon, PauseIcon, PlayIcon, StepBackIcon, StepFwdIcon, VolumeIcon, VolumeXIcon } from './icons'
+import { useI18n } from '../lib/i18n'
 
 interface VideoBarProps {
   playing: boolean
@@ -37,6 +38,7 @@ export function VideoBar({
   onToggleMute,
   onVolume,
 }: VideoBarProps) {
+  const { t } = useI18n()
   const max = duration || 0
   return (
     <div className="flex h-11 shrink-0 items-center gap-3 border-t border-line bg-panel px-4">
@@ -47,7 +49,7 @@ export function VideoBar({
 
       <button
         type="button"
-        aria-label="Back 5 seconds"
+        aria-label={t('back5')}
         onClick={() => onSkip(-5)}
         className="grid h-7 w-7 place-items-center rounded-full text-muted transition-colors hover:text-ink"
       >
@@ -56,7 +58,7 @@ export function VideoBar({
 
       <button
         type="button"
-        aria-label={playing ? 'Pause' : 'Play'}
+        aria-label={playing ? t('pause') : t('play')}
         onClick={onTogglePlay}
         className="grid h-8 w-8 place-items-center rounded-full bg-brand text-white transition-transform hover:scale-105"
       >
@@ -65,7 +67,7 @@ export function VideoBar({
 
       <button
         type="button"
-        aria-label="Forward 5 seconds"
+        aria-label={t('forward5')}
         onClick={() => onSkip(5)}
         className="grid h-7 w-7 place-items-center rounded-full text-muted transition-colors hover:text-ink"
       >
@@ -83,7 +85,7 @@ export function VideoBar({
         max={max}
         step={0.01}
         value={Math.min(currentTime, max)}
-        aria-label="Seek"
+        aria-label={t('seek')}
         onChange={(e) => onScrub(parseFloat(e.target.value))}
         onPointerUp={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
         onPointerCancel={(e) => onSeek(parseFloat((e.target as HTMLInputElement).value))}
@@ -99,7 +101,7 @@ export function VideoBar({
 
       <button
         type="button"
-        aria-label={muted ? 'Unmute' : 'Mute'}
+        aria-label={muted ? t('unmute') : t('mute')}
         onClick={onToggleMute}
         className="grid h-7 w-7 place-items-center rounded-full text-muted transition-colors hover:text-ink"
       >

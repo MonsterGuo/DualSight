@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { MediaKind, MediaTab, SlotId, type MediaSource } from '../types'
 import { IMAGE_ACCEPT, VIDEO_ACCEPT, mediaSrc } from '../lib/media'
 import { CloseIcon, FilmBadgeIcon, PlayIcon, UploadIcon } from './icons'
+import { useI18n } from '../lib/i18n'
 
 interface MediaSlotProps {
   slot: SlotId
@@ -17,9 +18,12 @@ const SLOT_COLOR: Record<SlotId, string> = {
 }
 
 export function MediaSlot({ slot, media, tab, onFiles, onClear }: MediaSlotProps) {
+  const { t } = useI18n()
   const inputRef = useRef<HTMLInputElement>(null)
   const color = SLOT_COLOR[slot]
-  const kindLabel = media?.kind === MediaKind.Video ? 'Video' : 'Image'
+  const kindLabel = media?.kind === MediaKind.Video ? t('kindVideo') : t('kindImage')
+  const firstKind = tab === MediaTab.Image ? t('kindImage') : t('kindVideo')
+  const secondKind = tab === MediaTab.Image ? t('kindVideo') : t('kindImage')
 
   const openPicker = () => inputRef.current?.click()
 
@@ -53,9 +57,9 @@ export function MediaSlot({ slot, media, tab, onFiles, onClear }: MediaSlotProps
         {media && (
           <button
             type="button"
-            aria-label={`Remove ${slot}`}
+            aria-label={t('removeSlot', { slot })}
             onClick={onClear}
-            className="ml-auto grid h-6 w-6 place-items-center rounded text-muted transition-colors hover:bg-white/10 hover:text-ink"
+            className="ml-auto grid h-6 w-6 place-items-center rounded text-muted transition-colors hover:bg-wash/10 hover:text-ink"
           >
             <CloseIcon size={13} />
           </button>
@@ -67,12 +71,11 @@ export function MediaSlot({ slot, media, tab, onFiles, onClear }: MediaSlotProps
           type="button"
           data-drop-slot={slot}
           onClick={openPicker}
-          className="flex h-[104px] w-full flex-col items-center justify-center gap-2 border-t border-line text-muted transition-colors hover:bg-white/[0.03] hover:text-ink"
+          className="flex h-[104px] w-full flex-col items-center justify-center gap-2 border-t border-line text-muted transition-colors hover:bg-wash/[0.03] hover:text-ink"
         >
           <UploadIcon size={20} />
           <span className="text-[12px]">
-            Drop or click · {tab === MediaTab.Image ? 'image' : 'video'} /{' '}
-            {tab === MediaTab.Image ? 'video' : 'image'}
+            {t('dropHint', { first: firstKind, second: secondKind })}
           </span>
         </button>
       ) : media.kind === MediaKind.Image ? (
