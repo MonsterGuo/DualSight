@@ -1,4 +1,5 @@
 # DualSight
+<img width="2560" height="1380" alt="image" src="https://github.com/user-attachments/assets/4c9ee9a8-1cb1-4af6-976d-79cccd91f45d" />
 
 > 并排看两版素材，一眼看出改了什么。
 
